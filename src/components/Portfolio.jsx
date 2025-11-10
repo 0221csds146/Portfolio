@@ -7,6 +7,11 @@ const Portfolio = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [typedText, setTypedText] = useState('');
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [chatMessages, setChatMessages] = useState([
+    { text: "Hi! I'm Rajeev's AI assistant. Ask me about his projects, skills, or experience!", sender: 'bot' }
+  ]);
+  const [chatInput, setChatInput] = useState('');
 
   const roles = [
     "Data Science Enthusiast 📊",
@@ -178,6 +183,77 @@ const Portfolio = () => {
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     setMobileMenuOpen(false);
+  };
+
+  const handleChatSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted, input:', chatInput); // Debug log
+    
+    if (!chatInput.trim()) {
+      console.log('Empty input, returning');
+      return;
+    }
+    
+    const userMessage = chatInput.toLowerCase();
+    const userText = chatInput;
+    
+    console.log('Processing message:', userText); // Debug log
+    
+    // Add user message immediately
+    setChatMessages(prev => {
+      const newMessages = [...prev, { text: userText, sender: 'user' }];
+      console.log('Updated messages:', newMessages); // Debug log
+      return newMessages;
+    });
+    
+    // Clear input immediately after adding message
+    setChatInput('');
+    
+    // Simple keyword-based responses
+    let botResponse = "That's interesting! Feel free to explore my projects and skills sections for more details.";
+    
+    if (userMessage.includes('project') || userMessage.includes('work')) {
+      botResponse = "I've worked on 4 major projects: MLOps Vehicle Insurance Pipeline, RockyBot (AI Research Tool), Sales Data Analysis Dashboard, and Smart Assistant. Check out the Projects section to see them in detail!";
+    } else if (userMessage.includes('skill') || userMessage.includes('technology') || userMessage.includes('tech')) {
+      botResponse = "My key skills include Python, SQL, Machine Learning, Power BI, Tableau, AWS, Docker, and Kubernetes. I specialize in Data Science and MLOps!";
+    } else if (userMessage.includes('experience') || userMessage.includes('background') || userMessage.includes('education')) {
+      botResponse = "I'm a final-year Computer Science student from NIET, passionate about data science and AI. I've completed several end-to-end projects in data analytics and machine learning.";
+    } else if (userMessage.includes('contact') || userMessage.includes('reach') || userMessage.includes('email') || userMessage.includes('phone')) {
+      botResponse = "You can reach Rajeev at Kumarr22470@gmail.com or call +91 7703834624. He's also active on LinkedIn and GitHub!";
+    } else if (userMessage.includes('mlops') || userMessage.includes('insurance') || userMessage.includes('vehicle')) {
+      botResponse = "The MLOps Vehicle Insurance project is a complete pipeline using MongoDB, AWS (S3, EC2, ECR), Docker, and GitHub Actions for CI/CD. It covers data ingestion, transformation, model training, and deployment!";
+    } else if (userMessage.includes('rocky') || userMessage.includes('news') || userMessage.includes('research tool')) {
+      botResponse = "RockyBot is an AI-powered news research assistant built with Google Gemini, Streamlit, and LangChain. It uses FAISS for semantic search and can analyze multiple news articles intelligently!";
+    } else if (userMessage.includes('sales') || userMessage.includes('dashboard') || userMessage.includes('power bi')) {
+      botResponse = "The Sales Data Analysis project analyzes Atliq Hardware Sales using Power BI, MySQL, and Excel. It tracks revenue, profit margins, and market performance from 2017-2020!";
+    } else if (userMessage.includes('smart') || userMessage.includes('assistant') || userMessage.includes('pdf')) {
+      botResponse = "Smart Assistant is an AI tool built with Groq LLaMA3 and Streamlit. It summarizes PDFs, answers document questions, and generates MCQs using FAISS vector search!";
+    } else if (userMessage.includes('hello') || userMessage.includes('hi') || userMessage.includes('hey')) {
+      botResponse = "Hello! 👋 I'm here to help you learn about Rajeev's work. Ask me about his projects, skills, or how to contact him!";
+    } else if (userMessage.includes('resume') || userMessage.includes('cv') || userMessage.includes('download')) {
+      botResponse = "You can download Rajeev's resume from the hero section or directly from this link: https://drive.google.com/file/d/1MXZhixxO0x1v4qdcrUxd3Rjpis09PaDi/view";
+    } else if (userMessage.includes('who') || userMessage.includes('about')) {
+      botResponse = "Rajeev Kumar is a Computer Science student specializing in Data Science from NIET. He's passionate about solving data problems using Python, SQL, and MLOps. He has built several end-to-end projects in data analytics and AI!";
+    } else if (userMessage.includes('github')) {
+      botResponse = "You can find all of Rajeev's projects on GitHub at: https://github.com/0221csds146";
+    } else if (userMessage.includes('linkedin')) {
+      botResponse = "Connect with Rajeev on LinkedIn: https://www.linkedin.com/in/rajeev-kumar-690541167/";
+    }
+    
+    console.log('Bot response:', botResponse); // Debug log
+    
+    // Add bot response after a short delay
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, { text: botResponse, sender: 'bot' }]);
+      
+      // Scroll to bottom
+      setTimeout(() => {
+        const chatContainer = document.getElementById('chatMessages');
+        if (chatContainer) {
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+      }, 100);
+    }, 800);
   };
 
   return (
@@ -488,6 +564,73 @@ const Portfolio = () => {
           </p>
         </div>
       </footer>
+
+      {/* Floating Chatbot Button */}
+      <button
+        onClick={() => setShowChatbot(!showChatbot)}
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50 animate-pulse"
+      >
+        {showChatbot ? <X size={28} className="text-white" /> : <MessageSquare size={28} className="text-white" />}
+      </button>
+
+      {/* Chatbot Window */}
+      {showChatbot && (
+        <div className={`fixed bottom-24 right-6 w-96 h-[500px] rounded-2xl shadow-2xl z-50 flex flex-col ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+          {/* Chat Header */}
+          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-t-2xl flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+                <Brain size={24} className="text-purple-500" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white">AI Assistant</h3>
+                <p className="text-xs text-white/80">Ask me anything!</p>
+              </div>
+            </div>
+            <button onClick={() => setShowChatbot(false)} className="text-white hover:bg-white/20 p-1 rounded">
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4" id="chatMessages">
+            {chatMessages.map((msg, idx) => (
+              <div key={idx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`}>
+                <div className={`max-w-[80%] px-4 py-2 rounded-2xl ${
+                  msg.sender === 'user' 
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-br-none' 
+                    : darkMode 
+                      ? 'bg-gray-700 text-gray-100 rounded-bl-none' 
+                      : 'bg-gray-100 text-gray-900 rounded-bl-none'
+                }`}>
+                  <p className="text-sm break-words">{msg.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Chat Input */}
+          <form onSubmit={handleChatSubmit} className={`p-4 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask about projects, skills..."
+                autoComplete="off"
+                className={`flex-1 px-4 py-2 rounded-full ${darkMode ? 'bg-gray-700 text-white placeholder-gray-400' : 'bg-gray-100 text-gray-900 placeholder-gray-500'} focus:outline-none focus:ring-2 focus:ring-purple-500`}
+              />
+              <button 
+                type="submit"
+                disabled={!chatInput.trim()}
+                className={`w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center hover:scale-110 transition-transform ${!chatInput.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <span className="text-white text-xl font-bold">→</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
