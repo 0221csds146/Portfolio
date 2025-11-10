@@ -1,0 +1,20 @@
+# Render deployment configuration for React + Vite app
+
+services:
+  - type: web
+    name: ai-portfolio
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    buildFilter:
+      paths:
+        - src/**
+        - public/**
+        - package.json
+        - vite.config.mjs
+        - tailwind.config.js
+        - postcss.config.js
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
