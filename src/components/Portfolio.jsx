@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Code, Database, Cloud, Brain, Sparkles, Github, Linkedin, Mail, ExternalLink, Filter, Moon, Sun, ChevronDown, Menu, X, Award, Briefcase, BookOpen, MessageSquare, TrendingUp, BarChart3, Phone } from 'lucide-react';
+import profilePic from '../assets/profile.jpg';
 
 const Portfolio = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -381,11 +382,20 @@ const Portfolio = () => {
           </h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="text-center md:text-left">
-              <div className="w-64 h-64 mx-auto md:mx-0 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 p-2 mb-6">
-                <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center text-6xl">
-                  👨‍💻
+               <div className="relative w-64 h-64 mx-auto md:mx-0 rounded-full p-2 mb-6">
+                {/* Glowing Aura */}
+                <div className="absolute inset-0 rounded-full blur-2xl bg-gradient-to-br from-purple-500 to-pink-500 opacity-40 animate-pulse"></div>
+
+                {/* LinkedIn Profile Picture */}
+                <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-purple-500 shadow-xl">
+                  <img
+                    src={profilePic}
+                    alt="Rajeev Kumar"
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
                 </div>
               </div>
+
             </div>
             <div>
               <p className={`text-lg mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
